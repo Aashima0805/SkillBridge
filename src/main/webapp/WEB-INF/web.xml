@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+
+  <display-name>SkillBridge</display-name>
+
+  <!-- Number formatting used by JSTL fmt tags -->
+  <context-param>
+    <param-name>jakarta.servlet.jsp.jstl.fmt.locale</param-name>
+    <param-value>en_US</param-value>
+  </context-param>
+
+  <!-- Filters run in this order: encoding/headers first, then authentication + CSRF -->
+  <filter>
+    <filter-name>EncodingFilter</filter-name>
+    <filter-class>com.skillbridge.filter.EncodingFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>EncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>AuthFilter</filter-name>
+    <filter-class>com.skillbridge.filter.AuthFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AuthFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!-- Session: 30 minutes, cookie not readable from JavaScript -->
+  <session-config>
+    <session-timeout>30</session-timeout>
+    <cookie-config>
+      <http-only>true</http-only>
+    </cookie-config>
+  </session-config>
+
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+
+  <error-page>
+    <error-code>403</error-code>
+    <location>/error</location>
+  </error-page>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/error</location>
+  </error-page>
+  <error-page>
+    <error-code>500</error-code>
+    <location>/error</location>
+  </error-page>
+  <error-page>
+    <exception-type>java.lang.Throwable</exception-type>
+    <location>/error</location>
+  </error-page>
+
+  <!-- Every JSP: UTF-8, JSTL taglibs pre-loaded, no stray whitespace -->
+  <jsp-config>
+    <jsp-property-group>
+      <url-pattern>*.jsp</url-pattern>
+      <page-encoding>UTF-8</page-encoding>
+      <trim-directive-whitespaces>true</trim-directive-whitespaces>
+      <include-prelude>/WEB-INF/views/fragments/taglibs.jspf</include-prelude>
+    </jsp-property-group>
+  </jsp-config>
+</web-app>
