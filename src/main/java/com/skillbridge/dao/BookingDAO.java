@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
+import com.skillbridge.util.Config;
 public class BookingDAO {
     private static final String BASE =
             "SELECT b.id, b.customer_id, b.worker_id, b.booking_date, b.start_time, b.end_time, b.hours, b.address, b.notes, "
@@ -47,7 +47,12 @@ public class BookingDAO {
         b.setPlatformFee(rs.getBigDecimal("platform_fee"));
         b.setTotal(rs.getBigDecimal("total"));
         b.setStatus(rs.getString("status"));
-        b.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+        b.setCreatedAt(
+    rs.getTimestamp("created_at")
+      .toInstant()
+      .atZone(Config.zone())
+      .toLocalDateTime()
+);
         b.setPaymentStatus(rs.getString("pay_status"));
         b.setPaymentMethod(rs.getString("pay_method"));
         b.setPaymentDetail(rs.getString("pay_detail"));
